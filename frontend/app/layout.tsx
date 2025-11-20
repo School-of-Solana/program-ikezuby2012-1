@@ -1,16 +1,11 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ClusterProvider } from "@/components/cluster/cluster-data-access";
+import { AppLayout } from "@/components/ui/app-layout";
+import type { Metadata } from "next";
+import { ReactQueryProvider } from "./react-query-provider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import '@solana/wallet-adapter-react-ui/styles.css'
+import { SolanaProvider } from "@/components/solana/solana-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,10 +19,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body>
+        <ReactQueryProvider>
+          <ClusterProvider>
+            <SolanaProvider>
+              <AppLayout>{children}</AppLayout>
+            </SolanaProvider>
+          </ClusterProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
